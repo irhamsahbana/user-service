@@ -3,6 +3,7 @@ package users
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"strings"
 	"user-service/src/util/helper"
 	"user-service/src/util/repository/model/users"
@@ -88,7 +89,7 @@ func (s *store) GetUserDetails(bReq users.Users) (*users.Users, error) {
 	querySelect += `
 		ORDER BY created_at DESC limit 1
 	`
-
+	log.Println(querySelect)
 	var response users.Users
 	rows, err := s.db.Query(querySelect)
 	if err != nil {

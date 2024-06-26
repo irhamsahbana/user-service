@@ -8,6 +8,7 @@ import (
 	"github.com/thedevsaddam/renderer"
 
 	userUsecase "user-service/src/app/dto/users"
+	productHandler "user-service/src/handlers/products"
 	userHandler "user-service/src/handlers/users"
 	userStore "user-service/src/util/repository/users"
 
@@ -42,6 +43,7 @@ func setupRoutes(render *renderer.Render, myDb *sql.DB) *routes.Routes {
 	userStore := userStore.NewStore(myDb)
 	userUsecase := userUsecase.NewUserUsecase(userStore)
 	userHandler := userHandler.NewUserHandler(userUsecase, render)
+	productHandler := productHandler.NewProductHandler(render)
 
 	integrationUseCase := integrationUseCase.NewUserUsecase(userStore)
 	integrationHandler := integrationHandler.NewHandler(render, userUsecase, integrationUseCase)
@@ -49,5 +51,6 @@ func setupRoutes(render *renderer.Render, myDb *sql.DB) *routes.Routes {
 	return &routes.Routes{
 		Integration: integrationHandler,
 		User:        userHandler,
+		Product:     productHandler,
 	}
 }

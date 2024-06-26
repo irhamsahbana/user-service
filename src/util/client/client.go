@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"net/url"
 )
 
 type NetClientRequest struct {
@@ -54,7 +55,7 @@ func (ncr *NetClientRequest) Get(channel chan Response) {
 	channel <- Response{Res: resBody, Status: bResp.StatusCode}
 }
 
-func Post(netClient *http.Client, url string, load interface{}, channel chan Response) {
+func (ncr *NetClientRequest) Post(load interface{}, channel chan Response) {
 	go func() {
 		marshalled, err := json.Marshal(load)
 		if err != nil {
@@ -62,14 +63,44 @@ func Post(netClient *http.Client, url string, load interface{}, channel chan Res
 			return
 		}
 
-		bResp, err := netClient.Post(url, "application/json", bytes.NewBuffer(marshalled))
+		// Construct URL with query parameters
+		urlObj, err := url.Parse(ncr.RequestUrl)
+		if err != nil {
+			channel <- Response{Err: err}
+			return
+		}
+
+		if len(ncr.QueryParam) > 0 {
+			query := urlObj.Query()
+			for _, param := range ncr.QueryParam {
+				query.Add(param.Param, param.Value)
+			}
+			urlObj.RawQuery = query.Encode()
+		}
+
+		// Create a new POST request
+		req, err := http.NewRequest("POST", urlObj.String(), bytes.NewBuffer(marshalled))
+		if err != nil {
+			channel <- Response{Err: err}
+			return
+		}
+		req.Header.Set("Content-Type", "application/json")
+
+		// Perform the request
+		bResp, err := ncr.NetClient.Do(req)
 		if err != nil {
 			channel <- Response{Err: err}
 			return
 		}
 		defer bResp.Body.Close()
 
-		respBody, _ := io.ReadAll(bResp.Body)
+		// Read the response body
+		respBody, err := io.ReadAll(bResp.Body)
+		if err != nil {
+			channel <- Response{Err: err}
+			return
+		}
+
 		channel <- Response{Res: respBody, Status: bResp.StatusCode}
 	}()
 }

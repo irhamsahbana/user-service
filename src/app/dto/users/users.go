@@ -2,6 +2,7 @@ package users
 
 import (
 	"errors"
+	"log"
 	"math"
 	"time"
 	"user-service/src/util/helper/jwt"
@@ -56,6 +57,7 @@ func (u *UserUsecase) Register(bReq users.Users) (*uuid.UUID, error) {
 
 func (u *UserUsecase) Login(bReq users.Users) (*users.LoginResponse, error) {
 	usrLogin, err := u.user.GetUserDetails(bReq)
+	log.Println(usrLogin)
 	if err != nil {
 		return nil, err
 	}

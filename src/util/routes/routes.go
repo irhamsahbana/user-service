@@ -13,6 +13,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/spf13/viper"
 
+	product "user-service/src/handlers/products"
 	user "user-service/src/handlers/users"
 	integration "user-service/src/handlers/users/integrations"
 )
@@ -21,6 +22,7 @@ type Routes struct {
 	Router      *mux.Router
 	Integration *integration.Handler
 	User        *user.Handler
+	Product     *product.Handler
 }
 
 func EnabledCors(next http.Handler) http.Handler {
@@ -108,6 +110,7 @@ func (r *Routes) SetupRouter() {
 	r.SetupBaseURL()
 	r.SetupIntegration()
 	r.SetupUser()
+	r.SetupProduct()
 }
 
 func (r *Routes) SetupBaseURL() {
@@ -134,4 +137,10 @@ func (r *Routes) SetupUser() {
 	authenticatedRoutes.Use(middleware.Authentication)
 	authenticatedRoutes.HandleFunc("", r.User.GetUsers).Methods(http.MethodGet, http.MethodOptions)
 	authenticatedRoutes.HandleFunc("/{user_id}/update", r.User.UpdateProfile).Methods(http.MethodPut, http.MethodOptions)
+}
+
+func (r *Routes) SetupProduct() {
+	productRoutes := r.Router.PathPrefix("/products").Subrouter()
+	productRoutes.Use(middleware.Authentication)
+	productRoutes.HandleFunc("", r.Product.CreateShop).Methods(http.MethodPost, http.MethodOptions)
 }
