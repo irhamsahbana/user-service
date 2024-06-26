@@ -1,0 +1,107 @@
+{
+	"info": {
+		"_postman_id": "8f1423e6-f3b0-41a5-9c8f-3efd813209ef",
+		"name": "usr-services",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23782154",
+		"_collection_link": "https://warped-moon-579958.postman.co/workspace/Eratani-Workspace~81bb18b1-9b2a-4822-8e88-dc1a676aef3b/collection/23782154-8f1423e6-f3b0-41a5-9c8f-3efd813209ef?action=share&source=collection_link&creator=23782154"
+	},
+	"item": [
+		{
+			"name": "signup email",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"iwannaworkafteroffice@gmail.com\",\n    \"username\": \"iwannaworkafteroffice\",\n    \"role\": \"Admin\",\n    \"Address\": \"Jakarta\",\n    \"category_preferences\": [\n        \"Pertama\",\n        \"Kedua\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9990/users/signup/email",
+					"host": [
+						"localhost"
+					],
+					"port": "9990",
+					"path": [
+						"users",
+						"signup",
+						"email"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "signin email",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"iwannaworkafteroffice@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9990/users/signin/email",
+					"host": [
+						"localhost"
+					],
+					"port": "9990",
+					"path": [
+						"users",
+						"signin",
+						"email"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get users with filters",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbCI6Iml3YW5uYXdvcmthZnRlcm9mZmljZUBnbWFpbC5jb20iLCJVc2VySUQiOiIxOTczYWI1YS1kNTlmLTQzNDUtOTIzZC01Y2M4ZDJjYTIzODQiLCJpc3MiOiJ1c2VyX2xvZ2luIiwic3ViIjoic2hvcGlmdW4iLCJleHAiOjE3MTk2NjM3MDEsIm5iZiI6MTcxOTQwNDUwMSwiaWF0IjoxNzE5NDA0NTAxLCJqdGkiOiJmMGZhZmJjYy1iZDc2LTQzYjYtYjMwNS05YmRhMDZhMGZlZDMifQ.Y8e_vIbwNnShcDi8J1FWqRbd_STS7GoAnikYVnGk6lU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:9990/users?page=1&limit=100",
+					"host": [
+						"localhost"
+					],
+					"port": "9990",
+					"path": [
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "100"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
